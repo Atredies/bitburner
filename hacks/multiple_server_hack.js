@@ -1,21 +1,33 @@
-var servers = ['n00dles', 'foodnstuff'];
+import { getServerList } from "servers.script"
 
-for (i = 0; i < servers.length; ++i) {
 
-	var server = servers[i]
+var server_list = getServerList();
 
-	var minsec = getServerMinSecurityLevel(server)
-	var sec = getServerMinSecurityLevel(server)
+while (true) {
 
-	while (true) {
-		hack(server);
-		if (minsec + 5 > sec) {
-			grow(server);
+	// Itterates through list of servers from import
+	for (i = 0; i < server_list.length; ++i) {
 
+		// Gets server name from list
+		var target = server_list[i];
+
+		// Security Level variables for Servers
+		var securityThresh = getServerMinSecurityLevel(target) + 5;
+		var securityLevel = getServerSecurityLevel(target);
+
+		// Money Thresh
+		var moneyThresh = getServerMaxMoney(target) * 0.75;
+
+		if (securityLevel > securityThresh) {
+			weaken(target);
+		}
+
+		else if (getServerMoneyAvailable(target) < moneyThresh) {
+			grow(target)
 		}
 
 		else {
-			weaken(server);
+			hack(target)
 		}
 	}
 }
